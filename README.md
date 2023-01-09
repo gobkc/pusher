@@ -15,10 +15,10 @@ go get -u github.com/gobkc/pusher
 
 ### Quick start
 ````
-	type User struct {
-		Name string
-		Pass string
-	}
+    type User struct {
+        Name string
+        Pass string
+    }
     wg := sync.WaitGroup{}
     wg.Add(2)
     topic := "test topic"
