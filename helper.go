@@ -1,5 +1,7 @@
 package pusher
 
+import "fmt"
+
 func Push(topic string, data any) {
 	NewPusher().Push(topic, data)
 }
@@ -9,12 +11,13 @@ func Subs(topic string, f func(cb SubsCallback)) {
 }
 
 type Item struct {
-	Topic string
+	Topic any
 	Cb    func(cb SubsCallback)
 }
 
 func Register(subs []*Item) {
 	for _, sub := range subs {
-		NewPusher().getSubscribers().Subs(sub.Topic, sub.Cb)
+		tp := fmt.Sprintf("%v", sub.Topic)
+		NewPusher().getSubscribers().Subs(tp, sub.Cb)
 	}
 }
