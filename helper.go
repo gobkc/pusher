@@ -9,12 +9,12 @@ func Subs(topic string, f func(cb SubsCallback)) {
 }
 
 type Item struct {
-	topic string
-	fc    func(cb SubsCallback)
+	Topic string
+	Cb    func(cb SubsCallback)
 }
 
 func Register(subs ...Item) {
 	for _, sub := range subs {
-		NewPusher().getSubscribers().Subs(sub.topic, sub.fc)
+		NewPusher().getSubscribers().Subs(sub.Topic, sub.Cb)
 	}
 }
