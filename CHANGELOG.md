@@ -17,3 +17,9 @@
 **Bugs**
 
 * Fix "Not Export Item Fields" Bug
+
+### v0.0.4
+
+**Features**
+
+* Optimize "Register" Feature

@@ -13,7 +13,7 @@ type Item struct {
 	Cb    func(cb SubsCallback)
 }
 
-func Register(subs ...Item) {
+func Register(subs []*Item) {
 	for _, sub := range subs {
 		NewPusher().getSubscribers().Subs(sub.Topic, sub.Cb)
 	}
