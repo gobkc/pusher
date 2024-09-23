@@ -38,8 +38,14 @@ func Subs[T Subscriber](receiver any, f func(cb T)) {
 	})
 }
 
-func Register(f func(list []*Item)) {
-	var list []*Item
+func Register[T Subscriber](f func(list []*struct {
+	Request  any
+	CallBack func(cb T)
+})) {
+	var list []*struct {
+		Request  any
+		CallBack func(cb T)
+	}
 	f(list)
 	for _, item := range list {
 		Subs(item.Request, item.CallBack)

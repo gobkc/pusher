@@ -11,7 +11,7 @@ type SubscriberCallBackImpl struct {
 
 var CallBackTypeError = errors.New(`checkIsSlice:dest must be a struct pointer`)
 
-func (s *SubscriberCallBackImpl) Bind(data any) error {
+func (s SubscriberCallBackImpl) Bind(data any) error {
 	dataType := reflect.TypeOf(data)
 	elem := reflect.ValueOf(data)
 	if reflect.Pointer == dataType.Kind() {
@@ -25,6 +25,6 @@ func (s *SubscriberCallBackImpl) Bind(data any) error {
 	return nil
 }
 
-func (s *SubscriberCallBackImpl) Set(data any) {
+func (s SubscriberCallBackImpl) Set(data any) {
 	s.Data = data
 }

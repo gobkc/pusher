@@ -18,11 +18,6 @@ type Subscriber interface {
 	Set(data any)
 }
 
-type Item struct {
-	Request  any
-	CallBack func(cb Subscriber)
-}
-
 type Setting struct {
 	Interval        time.Duration
 	ConcurrentLimit int
