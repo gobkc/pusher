@@ -26,7 +26,7 @@ func New(functions ...func(settings *Setting)) Pusher {
 	return ps
 }
 
-func Push[T comparable](data T) {
+func Push[T any](data T) {
 	New().Push(data)
 }
 
@@ -36,20 +36,6 @@ func Subs[T Subscriber](receiver any, f func(cb T)) {
 		nm.Set(msg)
 		f(nm)
 	})
-}
-
-func Register[T Subscriber](f func(list []*struct {
-	Request  any
-	CallBack func(cb T)
-})) {
-	var list []*struct {
-		Request  any
-		CallBack func(cb T)
-	}
-	f(list)
-	for _, item := range list {
-		Subs(item.Request, item.CallBack)
-	}
 }
 
 func isSameStructType(struct1, struct2 any) bool {
