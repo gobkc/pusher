@@ -32,7 +32,7 @@ func Push[T any](data T) {
 
 func Subs[T Subscriber](receiver any, f func(cb T)) {
 	New().Subs(receiver, func(msg any) {
-		nm := msg.(T) // new message
+		var nm = *new(T)
 		nm.Set(msg)
 		f(nm)
 	})
