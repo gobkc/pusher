@@ -1,17 +1,21 @@
 package pusher
 
-import "time"
+import (
+	"log/slog"
+	"time"
+)
 
 type Pusher interface {
 	Push(data any)
 	//Subs
 	//d: this parameter represents the data used by the Push function.
-	Subs(d any, f func(cb Subscriber))
-	Register(func(list []*Item))
+	Subs(d any, callback func(msg any))
+	Logger() *slog.Logger
 }
 
 type Subscriber interface {
 	Bind(data any) error
+	Set(data any)
 }
 
 type Item struct {

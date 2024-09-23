@@ -2,7 +2,49 @@ package pusher
 
 import (
 	"reflect"
+	"sync"
+	"time"
 )
+
+var once sync.Once
+var ps Pusher
+
+func New(functions ...func(settings *Setting)) Pusher {
+	once.Do(func() {
+		settings := &Setting{
+			Interval:        2 * time.Second,
+			ConcurrentLimit: 2000,
+			EnabledLog:      true,
+		}
+		for _, f := range functions {
+			f(settings)
+		}
+		ps = &GoPusher{
+			settings: settings,
+		}
+	})
+	return ps
+}
+
+func Push[T comparable](data T) {
+	New().Push(data)
+}
+
+func Subs[T Subscriber](receiver any, f func(cb T)) {
+	New().Subs(receiver, func(msg any) {
+		nm := msg.(T) // new message
+		nm.Set(msg)
+		f(nm)
+	})
+}
+
+func Register(f func(list []*Item)) {
+	var list []*Item
+	f(list)
+	for _, item := range list {
+		Subs(item.Request, item.CallBack)
+	}
+}
 
 func isSameStructType(struct1, struct2 any) bool {
 	k1 := reflect.TypeOf(struct1)

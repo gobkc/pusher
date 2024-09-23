@@ -24,3 +24,7 @@ func (s *SubscriberCallBackImpl) Bind(data any) error {
 	elem.Set(reflect.ValueOf(s.Data))
 	return nil
 }
+
+func (s *SubscriberCallBackImpl) Set(data any) {
+	s.Data = data
+}
