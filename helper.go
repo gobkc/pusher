@@ -53,3 +53,12 @@ func isSameStructType(struct1, struct2 any) bool {
 	}
 	return k1 == k2
 }
+
+func getStructName(d any) string {
+	de := reflect.ValueOf(d)
+	if de.Kind() == reflect.Pointer {
+		de = de.Elem()
+	}
+	n := de.Type().Name()
+	return n
+}

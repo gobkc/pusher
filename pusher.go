@@ -1,6 +1,7 @@
 package pusher
 
 import (
+	"github.com/gobkc/to"
 	"log/slog"
 	"reflect"
 	"time"
@@ -36,11 +37,14 @@ func (p *GoPusher) Subs(ds any, callback func(cdata any)) {
 		ds:  ds,
 	}
 	p.subs = append(p.subs, &ns)
+	p.ReportEventRegistered(ds)
 	go func() {
 		for {
 			select {
 			case msg := <-ns.msg:
+				p.ReportEventStart(msg)
 				callback(msg)
+				p.ReportEventCompleted(msg)
 			}
 		}
 	}()
@@ -48,4 +52,25 @@ func (p *GoPusher) Subs(ds any, callback func(cdata any)) {
 
 func (p *GoPusher) Logger() *slog.Logger {
 	return slog.Default().WithGroup(`pusher`)
+}
+
+func (p *GoPusher) ReportEventStart(d any) {
+	if p.settings.EnabledLog {
+		event := getStructName(d)
+		p.Logger().Info(`event request`, slog.String(`event`, event), slog.String(`data`, to.Json(d)))
+	}
+}
+
+func (p *GoPusher) ReportEventCompleted(d any) {
+	if p.settings.EnabledLog {
+		event := getStructName(d)
+		p.Logger().Info(`event completed`, slog.String(`event`, event))
+	}
+}
+
+func (p *GoPusher) ReportEventRegistered(d any) {
+	if p.settings.EnabledLog {
+		event := getStructName(d)
+		p.Logger().Info(`event registration`, slog.String(event, `event has been registered`))
+	}
 }
