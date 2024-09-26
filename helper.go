@@ -27,7 +27,7 @@ func New(functions ...func(settings *Setting)) Pusher {
 }
 
 func Push[T any](data T) {
-	go New().Push(data)
+	New().Push(data)
 }
 
 func Subs[T Subscriber](receiver any, f func(cb T)) {

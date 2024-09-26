@@ -12,7 +12,7 @@ func (p *GoPusher) Push(data any) {
 		delay := p.settings.Interval
 		if len(p.subs) == 0 {
 			for {
-				p.Logger().Error(`no subscriber`, slog.Duration(`waiting`, p.settings.Interval))
+				p.Logger().Warn(`no subscriber`, slog.String(`waiting`, p.settings.Interval.String()))
 				if len(p.subs) > 0 {
 					p.Push(data)
 					return
@@ -51,7 +51,7 @@ func (p *GoPusher) Subs(ds any, callback func(cdata any)) {
 }
 
 func (p *GoPusher) Logger() *slog.Logger {
-	return slog.Default().WithGroup(`pusher`)
+	return slog.Default()
 }
 
 func (p *GoPusher) ReportEventStart(d any) {
