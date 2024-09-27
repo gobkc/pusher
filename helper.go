@@ -32,9 +32,21 @@ func Push[T any](data T) {
 
 func Subs[T Subscriber](receiver any, f func(cb T)) {
 	New().Subs(receiver, func(msg any) {
-		var nm = *new(T)
-		nm = nm.Set(msg).(T)
-		f(nm)
+		var nm = new(T)
+		v := reflect.ValueOf(nm).Elem()
+		childField := v.FieldByName("SubscriberCallBackImpl")
+		var field reflect.Value
+		if childField.IsValid() {
+			field = childField.FieldByName("Data")
+		}
+
+		if !field.IsValid() || !field.CanSet() {
+			field = v.FieldByName("Data")
+		}
+		if field.IsValid() && field.CanSet() {
+			field.Set(reflect.ValueOf(msg))
+		}
+		f(*nm)
 	})
 }
 
