@@ -25,6 +25,7 @@ func (s SubscriberCallBackImpl) Bind(data any) error {
 	return nil
 }
 
-func (s SubscriberCallBackImpl) Set(data any) {
+func (s SubscriberCallBackImpl) Set(data any) Subscriber {
 	s.Data = data
+	return s
 }

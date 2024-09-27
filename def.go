@@ -15,7 +15,7 @@ type Pusher interface {
 
 type Subscriber interface {
 	Bind(data any) error
-	Set(data any)
+	Set(data any) Subscriber
 }
 
 type Setting struct {
